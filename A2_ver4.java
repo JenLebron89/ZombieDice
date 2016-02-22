@@ -98,8 +98,7 @@ class A2_ver4
 		String [] yellowDice = {"Shotgun","Shotgun","Footprint","Footprint","Brain","Brain"};//are these  still needed
 		String [] playerNames;
 		String [] diceColor = {"green", "green", "green", "green", "green", "green", "yellow", "yellow", "yellow", "yellow", "red", "red", "red"};
-	
-		int [] playerScores;  
+	 
 		
 	  	//players settings
 		int noOfPlayers = 0;
@@ -128,6 +127,8 @@ class A2_ver4
 		System.out.print("How Many Players: ");
 		noOfPlayers = in.nextInt();
 		in.nextLine();// clean out scanner
+
+		int [] playerScores = new int[noOfPlayers]; // score array
 		
 		lives = noOfPlayers;
 		playerNames = new String[noOfPlayers];
@@ -169,7 +170,7 @@ class A2_ver4
 				shotgun++;
 				
 				// shotgun check
-				System.out.println("No of shotguns to the face: " + shotgun);
+				System.out.println("No of shots to the face: " + shotgun);
 				System.out.println(" ");
 				
 				// if(CheckShotgun(shotgun)) // change player 
