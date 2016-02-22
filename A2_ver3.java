@@ -6,7 +6,6 @@ import java.util.*;
 Game Rules
 On each turn, randomly generate 3 dice for the game. Each one is a human victim.
 There are 3 different types of die in the game
-
 1 Red are the toughest.
 	(They have 3 Shotguns sides, 2 Footprints sides and 1 Brains side)
 2 Green are easiest.
@@ -28,16 +27,13 @@ Contents
 		4Y 
 		3R
 	1 Cup 
-
 Start
 	Introduction: Rules
 	No of players 
 	Names of players 
-
 Turn:
 	display player name
 	display player points
-
 User Input
 	See leaderboards
 	Roll
@@ -46,7 +42,6 @@ User Input
 	Display results
 	
 	Check & compare results
-
 		Check shotguns
 			store on each roll
 			3 or higher: end turn & lose unbanked brains
@@ -56,14 +51,12 @@ User Input
 			store on each roll
 			if 13 or higher: win game/final round
 			bank brains: ends turn
-
 		Check Runner
 			Keep dice of that color in play and generate remaining dice
 	
 	Roll Again / Bank/ Last Round(if < 13 brains) / Tie(sudden Death)
+	
 Give Up
-
-
 Game System
 Generating Dice 			- 5
 Rolling Dice 				- 5
@@ -74,28 +67,24 @@ Game ending turn 			- 5
 Continue playing 			- 5
 Turn based system 			- 10
 Ending game 				- 5
-
 User Interface: 			(10%)
 Game style layout 			- 5
 Display current player	 	- 2
 User feedback 				- 3
-
 Coding style: 				(20%)
 Indentation 				- 3
 Comments 					- 4
 Use of Methods 				- 3
 Use of arrays 				- 10
-
 Extra Features: 			(20%)
 Using footprints correctly 	- 3
 Taking players names 		- 4
 3+ players 					- 3
 Use of arrays 				- 10
-
 in.nextLine() clean out sanner
 */
 
-class A2_ver1
+class A2_ver3
 {
 	public static void main (String[]args)
 	{
@@ -103,20 +92,31 @@ class A2_ver1
 		Random randomInt = new Random();
 		
 		//Arrays
-		String [] redDice = {"Shotgun", "Shotgun", "Shotgun","Footprint","Footprint","Brain"};
-		String [] greenDice = {"Shotgun","Footprint","Footprint","Brain","Brain","Brain"};
-		String [] yellowDice = {"Shotgun","Shotgun","Footprint","Footprint","Brain","Brain"};
+		String [] redDice = {"Shotgun", "Shotgun", "Shotgun","Footprint","Footprint","Brain"};//are these  still needed
+		String [] greenDice = {"Shotgun","Footprint","Footprint","Brain","Brain","Brain"};//are these  still needed
+		String [] yellowDice = {"Shotgun","Shotgun","Footprint","Footprint","Brain","Brain"};//are these  still needed
 		String [] playerNames;
+		String [] diceColor = {"green", "green", "green", "green", "green", "green", "yellow", "yellow", "yellow", "yellow", "red", "red", "red"};
 	
-		int [] playerScores;  // changed playerScorres to playerScores
+		int [] playerScores;  
 		
 	  	//players settings
 		int noOfPlayers = 0;
-		int turn = 1;
+		int turn = 0;
 		int lives = 0;
 		int userOption = 0;
-
+		int shotgun = 0; //shotguns per turn
+		int curbrains = 0; // brains counted per roll
+		
 		boolean nextPlayer = false;
+
+		int dice1 = 0;
+		int dice2 = 0;
+		int dice3 = 0;
+
+		String diceresult1 = " ";
+		String diceresult2 = " ";
+		String diceresult3 = " ";
 		
 		displayWelcomeMessage();
 		
@@ -129,7 +129,8 @@ class A2_ver1
 
 		for(int i = 0; i < playerNames.length; i++)
 		{
-			System.out.print("Enter Player " + (i+1) + " Name: ");
+			int playerNumber = i+1;
+			System.out.print("Enter Player " + playerNumber + " Name: ");
 			playerNames[i] = in.nextLine();
 		}
 		
@@ -139,52 +140,66 @@ class A2_ver1
 			
 			//player action prompted
 			System.out.println("Choose an option: ");
-			System.out.println("1 - Roll Dice, 2 - See Leaderboard, 3 - Exit"); 
+			System.out.println("1 - Roll Dice, 2 - Bank, 3 - See Leaderboard, 4 - Exit"); 
 			userOption = in.nextInt();
 			System.out.println("");
 
 			if(userOption == 1)
 			{
-				System.out.println("Play Game: ");
-				int roll1 = randomInt.nextInt(6);
-				System.out.println(redDice[roll1]);
-				int roll2 = randomInt.nextInt(6);
-				System.out.println(greenDice[roll2]);
-				int roll3 = randomInt.nextInt(6);
-				System.out.println(yellowDice[roll3]);
+				// calling method for dice colors
+				diceresult1 = rollColor(dice1, diceColor);  // will cause errow after a few turns not sure why
+
+				diceresult2 = rollColor(dice2, diceColor);
+
+				diceresult3 = rollColor(dice3, diceColor);
+
 				System.out.println(" ");
+				
+				// call method for dice roll
+				rollDice(diceresult1);
+				rollDice(diceresult2);
+				rollDice(diceresult3);
+
+				// for testing
+				shotgun++;
+				
+				// shotgun check
+				System.out.println("No of shotguns to the face: " + shotgun);
+				System.out.println(" ");
+				
+				if(CheckShotgun(shotgun)) // change player 
+				{
+					shotgun = 0;
+					nextPlayer = true;
+				}
 			}
 			else if (userOption == 2)
 			{
-				System.out.println("Leaderboard: ");
+				//Bank Brains
+				shotgun = 0;
+				nextPlayer = true;
 			}
 			else if (userOption == 3)
 			{
+				System.out.println("Leaderboard: ");
+				PrintNames(playerNames);
+			}
+			else if (userOption == 4)
+			{
 				lives = 0;
 			}
-			
-			//Insert Game Here
-			System.out.println("1 for Roll, 2 for bank "); 
-			userOption = in.nextInt();
-			
-			if(userOption == 1)
+				
+				
+			if(nextPlayer)
 			{
-				System.out.println("Roll Again");
-			}
-			else if(userOption == 2)
-			{
-				nextPlayer = true;
+				nextPlayer = false;
+				curbrains = 0; // reset unbanked brains
+				turn++; // next Player
 			}
 			
 			if(turn == noOfPlayers)  
 			{
-				turn = 0;
-			}
-			
-			if(nextPlayer)
-			{
-				nextPlayer = false;
-				turn++;
+				turn = 0; // return to starting player
 			}
 		}
 	}
@@ -192,27 +207,38 @@ class A2_ver1
 	public static void DisplayStart(int x, String [] myArray ) 
 	{
 		System.out.println("");
-		System.out.println(" "+ myArray[x-1]+"'s" + " turn");
+		System.out.println(" "+ myArray[x]+"'s" + " turn");
 		System.out.println("");
 	}
 	
-	public static void Names(String [] myArray)
+	public static void PrintNames(String [] myArray)
 	{
 		for(int i = 0; i < myArray.length; i++)
 		{
-			System.out.print("Player " + (i+1) + " Name: ");
+			int playerNumber = i+1;
+			System.out.print("Player " + playerNumber + " Name: ");
 			System.out.println(myArray[i]);		
+		}
+	}
+	
+	// Check current shotgun status
+	public static boolean CheckShotgun(int curShotguns) 
+	{
+		if(curShotguns > 2)
+		{
+			System.out.println("dead");
+			return true;
+		}
+		else
+		{
+			System.out.println("Not Dead");
+			return false;
 		}
 	}
 	
 	public static void Scores()
 	{
 		// save scores here
-	}
-	
-	public static void Dice()
-	{
-		
 	}
 
 	public static void displayWelcomeMessage () {
@@ -258,9 +284,53 @@ class A2_ver1
     	System.out.println("");
 		System.out.println("        Now go eat some BRAAAAINS!");
 		System.out.println("");
+	}
 
+	public static String rollColor (int dice, String[] diceColor) {
+		boolean rollcolor = false;
+		int x = 13;
+		Random randomInt = new Random();
+		String temp = " ";
 
+		while (rollcolor == false){
+			dice = randomInt.nextInt(x);
+			// System.out.println(dice);
+			if (diceColor[dice] == " ") {
+				rollcolor = false;
+			}
+			else {
+				System.out.println(diceColor[dice]);
+				temp = diceColor[dice];
+				diceColor[dice] = " ";
+				rollcolor = true;
+			}
+		}
+		return temp;
+	}
 
+	public static void rollDice (String diceresult){
+		String [] redDice = {"Shotgun", "Shotgun", "Shotgun","Footprint","Footprint","Brain"};
+		String [] greenDice = {"Shotgun","Footprint","Footprint","Brain","Brain","Brain"};
+		String [] yellowDice = {"Shotgun","Shotgun","Footprint","Footprint","Brain","Brain"};
+		Random randomInt = new Random();
 
+		if (diceresult == "red"){
+
+			int roll1 = randomInt.nextInt(6);
+			System.out.println(redDice[roll1]);
+			System.out.println(" ");
+		}
+		else if (diceresult == "green"){
+			int roll2 = randomInt.nextInt(6);
+			System.out.println(greenDice[roll2]);
+			System.out.println(" ");
+		}
+
+		else if (diceresult == "yellow"){
+			int roll3 = randomInt.nextInt(6);
+			System.out.println(yellowDice[roll3]);
+			System.out.println(" ");
+		}
+	
 	}
 }
