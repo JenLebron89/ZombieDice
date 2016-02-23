@@ -237,9 +237,12 @@ class A2_ver6
 				diceRoll = 3;
 				System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice);// testing
 				 
-				// These are the the variables to be used 
-				System.out.println("No of shots to the face: " + shotgun);
-				System.out.println("Delicious Brains: " + curbrains);
+				// These are the the variables to be used    -- Method?
+				System.out.println(" ");
+				System.out.println(" -----------------------------------------------");
+				System.out.print(" Shots to the face: " + shotgun);
+				System.out.println("    |   Delicious Brains: " + curbrains);
+				System.out.println(" -----------------------------------------------");
 
 				System.out.println(" ");
 				
