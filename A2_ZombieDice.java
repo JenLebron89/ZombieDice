@@ -92,19 +92,20 @@ class A2_ZombieDice
 		Random diceColorInt = new Random();
 		
 		//Arrays
-		String [] playerNames;
-		String [] diceColor = {"green", "green", "green", "green", "green", "green", "yellow", "yellow", "yellow", "yellow", "red", "red", "red"};
-	 
+		String [] playerNames;	 
 		
 	  	//players settings
 		int noOfPlayers = 0;
 		int turn = 0;
 		int lives = 0;
 		int userOption = 0;
+		
 		int shotgun = 0; //shotguns per turn
 		int curbrains = 0; // brains counted per roll
+		int footprints = 0; // count footprints
 		
-		boolean nextPlayer = false;
+		boolean rollStoredDice = false; //roll footprint dice
+		boolean nextPlayer = false; // change player
 
 		// dice pool
 		int noGreenDice = 6;
@@ -142,37 +143,73 @@ class A2_ZombieDice
 			if(userOption == 1)
 			{
 				int randomDiceColor = 0;
-				String diceTest = "";
+				String myDice = "";
 				
-				// add loop for 3 dice
+				//loop for 3 dice
 				while(diceRoll > 0)
 				{
 					randomDiceColor = diceColorInt.nextInt(3);
-					diceTest = ThrowDice(randomDiceColor);
-					System.out.println(diceTest); 
+					myDice = ThrowDice(randomDiceColor);
+					System.out.println(myDice); 
 					
-					if(randomDiceColor == 0 && noGreenDice > 0)//Green
+					if(footprints != 0 && rollStoredDice)// should only roll on the first go 
 					{
-						if(diceTest == "Brain")
+						System.out.println("Roll a runner: ");
+						footprints--;
+						//diceRoll--;
+					}
+					else if(randomDiceColor == 0 && noGreenDice > 0)//Green
+					{
+						if(myDice == "Brain")
 						{
 							noGreenDice--;
+							curbrains++;
+						}
+						else if(myDice == "Footprint")
+						{
+							//store dice for another turn
+							footprints++;
+						}
+						else if(myDice == "Shotgun")
+						{
+							shotgun++;
 						}
 						
 						diceRoll--;
 					}
 					else if(randomDiceColor == 1 && noRedDice > 0)//Red
 					{
-						if(diceTest == "Brain")
+						if(myDice == "Brain")
 						{
 							noRedDice--;
+							curbrains++;
+						}
+						else if(myDice == "Footprint")
+						{
+							//store dice for another turn
+							footprints++;
+						}
+						else if(myDice == "Shotgun")
+						{
+							shotgun++;
 						}
 						diceRoll--;
 					}
 					else if(randomDiceColor == 2 && noYellowDice > 0)// Yellow
 					{
-						if(diceTest == "Brain")
+						if(myDice == "Brain")
 						{
 							noYellowDice--;
+							curbrains++;
+						}
+						else if(myDice == "Footprint")
+						{
+							//store dice for another turn
+							footprints++;
+						}
+						else if(myDice == "Shotgun")
+						{
+							shotgun++;
 						}
 						diceRoll--;
 					}
@@ -184,32 +221,33 @@ class A2_ZombieDice
 							break;
 						}
 					}
-					
-					if(diceTest == "Shotgun")
-					{
-						shotgun++;
-					}
-					else if(diceTest == "Brain")
-					{
-						curbrains++;
-					}
 					System.out.println(diceRoll);
 				} 
 				
+				if(footprints > 0)// make this a function to check footprint int
+				{
+					rollStoredDice = true;
+					System.out.println("You have " + footprints + " Footprint Dice");
+				}
+				else
+				{
+					rollStoredDice = false;
+				}
+				
 				diceRoll = 3;
-				System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice);
+				System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice);// testing
 				 
-				// shotgun check
+				// These are the the variables to be used 
 				System.out.println("No of shots to the face: " + shotgun);
 				System.out.println("Delicious Brains: " + curbrains);
 
 				System.out.println(" ");
 				
-				// if(CheckShotgun(shotgun)) // change player 
-				// {
-				// 	shotgun = 0;
-				// 	nextPlayer = true;
-				// }
+				if(CheckShotgun(shotgun)) // change player 
+				{
+				 	shotgun = 0;
+					nextPlayer = true;
+				}
 			}
 			else if (userOption == 2)
 			{
@@ -230,6 +268,13 @@ class A2_ZombieDice
 			if(nextPlayer)
 			{
 				nextPlayer = false;
+				
+				// reset Dice in cup
+				noGreenDice = 6;
+				noYellowDice = 4;
+				noRedDice = 3;
+				
+				
 				curbrains = 0; // reset unbanked brains
 				turn++; // next Player
 			}
