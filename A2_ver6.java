@@ -257,6 +257,12 @@ class A2_ver6
 				//Bank Brains
 				shotgun = 0;
 				nextPlayer = true;
+				System.out.println(" -- You got " + curbrains + " brains this turn. --");
+				System.out.println("    -- Your total brains is X. --");
+				System.out.println("");
+				System.out.println("");
+
+
 			}
 			else if (userOption == 3)
 			{
@@ -292,7 +298,7 @@ class A2_ver6
 	public static void DisplayStart(int x, String [] myArray ) 
 	{
 		System.out.println("");
-		System.out.println(" "+ myArray[x]+"'s" + " turn");
+		System.out.println("   ************** "+ myArray[x]+"'s" + " turn **************");
 		System.out.println("");
 	}
 	
@@ -311,7 +317,11 @@ class A2_ver6
 	{
 		if(curShotguns > 2)
 		{
-			System.out.println("dead");
+			System.out.println("  YOU DIED AND LOST YOUR BRAINS. ");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
 			return true;
 		}
 		else
