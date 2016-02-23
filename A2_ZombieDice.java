@@ -84,21 +84,17 @@ Use of arrays 				- 10
 in.nextLine() clean out sanner
 */
 
-class A2_ver3
+class A2_ZombieDice
 {
 	public static void main (String[]args)
 	{
 		Scanner in = new Scanner(System.in);
-		Random randomInt = new Random();
+		Random diceColorInt = new Random();
 		
 		//Arrays
-		String [] redDice = {"Shotgun", "Shotgun", "Shotgun","Footprint","Footprint","Brain"};//are these  still needed
-		String [] greenDice = {"Shotgun","Footprint","Footprint","Brain","Brain","Brain"};//are these  still needed
-		String [] yellowDice = {"Shotgun","Shotgun","Footprint","Footprint","Brain","Brain"};//are these  still needed
 		String [] playerNames;
 		String [] diceColor = {"green", "green", "green", "green", "green", "green", "yellow", "yellow", "yellow", "yellow", "red", "red", "red"};
-	
-		int [] playerScores;  
+	 
 		
 	  	//players settings
 		int noOfPlayers = 0;
@@ -110,19 +106,18 @@ class A2_ver3
 		
 		boolean nextPlayer = false;
 
-		int dice1 = 0;
-		int dice2 = 0;
-		int dice3 = 0;
-
-		String diceresult1 = " ";
-		String diceresult2 = " ";
-		String diceresult3 = " ";
-		
+		// dice pool
+		int noGreenDice = 6;
+		int noYellowDice = 4;
+		int noRedDice = 3;
+		int diceRoll = 3;
 		displayWelcomeMessage();
 		
 		System.out.print("How Many Players: ");
 		noOfPlayers = in.nextInt();
 		in.nextLine();// clean out scanner
+
+		int [] playerScores = new int[noOfPlayers]; // score array
 		
 		lives = noOfPlayers;
 		playerNames = new String[noOfPlayers];
@@ -146,32 +141,75 @@ class A2_ver3
 
 			if(userOption == 1)
 			{
-				// calling method for dice colors
-				diceresult1 = rollColor(dice1, diceColor);  // will cause errow after a few turns not sure why
-
-				diceresult2 = rollColor(dice2, diceColor);
-
-				diceresult3 = rollColor(dice3, diceColor);
-
-				System.out.println(" ");
+				int randomDiceColor = 0;
+				String diceTest = "";
 				
-				// call method for dice roll
-				rollDice(diceresult1);
-				rollDice(diceresult2);
-				rollDice(diceresult3);
-
-				// for testing
-				shotgun++;
-				
-				// shotgun check
-				System.out.println("No of shotguns to the face: " + shotgun);
-				System.out.println(" ");
-				
-				if(CheckShotgun(shotgun)) // change player 
+				// add loop for 3 dice
+				while(diceRoll > 0)
 				{
-					shotgun = 0;
-					nextPlayer = true;
-				}
+					randomDiceColor = diceColorInt.nextInt(3);
+					diceTest = ThrowDice(randomDiceColor);
+					System.out.println(diceTest); 
+					
+					if(randomDiceColor == 0 && noGreenDice > 0)//Green
+					{
+						if(diceTest == "Brain")
+						{
+							noGreenDice--;
+						}
+						
+						diceRoll--;
+					}
+					else if(randomDiceColor == 1 && noRedDice > 0)//Red
+					{
+						if(diceTest == "Brain")
+						{
+							noRedDice--;
+						}
+						diceRoll--;
+					}
+					else if(randomDiceColor == 2 && noYellowDice > 0)// Yellow
+					{
+						if(diceTest == "Brain")
+						{
+							noYellowDice--;
+						}
+						diceRoll--;
+					}
+					else
+					{
+						System.out.println("Re Roll");
+						if(noGreenDice == 0 && noYellowDice == 0 && noGreenDice == 0)
+						{
+							break;
+						}
+					}
+					
+					if(diceTest == "Shotgun")
+					{
+						shotgun++;
+					}
+					else if(diceTest == "Brain")
+					{
+						curbrains++;
+					}
+					System.out.println(diceRoll);
+				} 
+				
+				diceRoll = 3;
+				System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice);
+				 
+				// shotgun check
+				System.out.println("No of shots to the face: " + shotgun);
+				System.out.println("Delicious Brains: " + curbrains);
+
+				System.out.println(" ");
+				
+				// if(CheckShotgun(shotgun)) // change player 
+				// {
+				// 	shotgun = 0;
+				// 	nextPlayer = true;
+				// }
 			}
 			else if (userOption == 2)
 			{
@@ -188,8 +226,7 @@ class A2_ver3
 			{
 				lives = 0;
 			}
-				
-				
+						
 			if(nextPlayer)
 			{
 				nextPlayer = false;
@@ -234,11 +271,6 @@ class A2_ver3
 			System.out.println("Not Dead");
 			return false;
 		}
-	}
-	
-	public static void Scores()
-	{
-		// save scores here
 	}
 
 	public static void displayWelcomeMessage () {
@@ -285,52 +317,39 @@ class A2_ver3
 		System.out.println("        Now go eat some BRAAAAINS!");
 		System.out.println("");
 	}
-
-	public static String rollColor (int dice, String[] diceColor) {
-		boolean rollcolor = false;
-		int x = 13;
-		Random randomInt = new Random();
-		String temp = " ";
-
-		while (rollcolor == false){
-			dice = randomInt.nextInt(x);
-			// System.out.println(dice);
-			if (diceColor[dice] == " ") {
-				rollcolor = false;
-			}
-			else {
-				System.out.println(diceColor[dice]);
-				temp = diceColor[dice];
-				diceColor[dice] = " ";
-				rollcolor = true;
-			}
-		}
-		return temp;
-	}
-
-	public static void rollDice (String diceresult){
+	
+	public static String ThrowDice(int diceColor)
+	{
 		String [] redDice = {"Shotgun", "Shotgun", "Shotgun","Footprint","Footprint","Brain"};
 		String [] greenDice = {"Shotgun","Footprint","Footprint","Brain","Brain","Brain"};
 		String [] yellowDice = {"Shotgun","Shotgun","Footprint","Footprint","Brain","Brain"};
+		
 		Random randomInt = new Random();
-
-		if (diceresult == "red"){
-
-			int roll1 = randomInt.nextInt(6);
-			System.out.println(redDice[roll1]);
-			System.out.println(" ");
+		String diceResult = "";
+		
+		//int diceColor = randomInt.nextInt(3);
+		int roll = randomInt.nextInt(6);	
+					
+		if(diceColor == 0)//Green Dice
+		{
+			System.out.println("Green");
+			diceResult = greenDice[roll];
 		}
-		else if (diceresult == "green"){
-			int roll2 = randomInt.nextInt(6);
-			System.out.println(greenDice[roll2]);
-			System.out.println(" ");
+		else if(diceColor == 1)// Red Dice 
+		{
+			System.out.println("Red");
+			diceResult = redDice[roll];
 		}
-
-		else if (diceresult == "yellow"){
-			int roll3 = randomInt.nextInt(6);
-			System.out.println(yellowDice[roll3]);
-			System.out.println(" ");
+		
+		else if(diceColor == 2)//Yellow Dice
+		{
+			System.out.println("Yellow");
+			diceResult = yellowDice[roll];
 		}
-	
+		else
+		{
+			diceResult = "Something went wrong";
+		}
+		return diceResult;
 	}
 }
