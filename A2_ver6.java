@@ -123,7 +123,7 @@ class A2_ver6
 		lives = noOfPlayers;
 		playerNames = new String[noOfPlayers];
 
-		for(int i = 0; i < playerNames.length; i++)
+		for(int i = 0; i < playerNames.length; i++) // need to change this to a while loop so I can access the playerNumber variable
 		{
 			int playerNumber = i+1;
 			System.out.print("Enter Player " + playerNumber + " Name: ");
@@ -257,8 +257,12 @@ class A2_ver6
 				//Bank Brains
 				shotgun = 0;
 				nextPlayer = true;
+				playerScores[turn] = playerScores[turn] + curbrains;
 				System.out.println(" -- You got " + curbrains + " brains this turn. --");
-				System.out.println("    -- Your total brains is X. --");
+				System.out.println("    -- Your total brains is " + playerScores[turn] + " --");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
 				System.out.println("");
 				System.out.println("");
 
@@ -318,6 +322,7 @@ class A2_ver6
 		if(curShotguns > 2)
 		{
 			System.out.println("  YOU DIED AND LOST YOUR BRAINS. ");
+			System.out.println("");
 			System.out.println("");
 			System.out.println("");
 			System.out.println("");
