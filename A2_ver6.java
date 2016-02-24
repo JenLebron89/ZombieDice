@@ -123,7 +123,7 @@ class A2_ver6
 		lives = noOfPlayers;
 		playerNames = new String[noOfPlayers];
 
-		for(int i = 0; i < playerNames.length; i++) // need to change this to a while loop so I can access the playerNumber variable
+		for(int i = 0; i < playerNames.length; i++) 
 		{
 			int playerNumber = i+1;
 			System.out.print("Enter Player " + playerNumber + " Name: ");
@@ -133,6 +133,9 @@ class A2_ver6
 		while(lives != 0)
 		{
 			DisplayStart(turn, playerNames);
+			// System.out.println("      -- Your current score is: " + playerScores[turn] + " --"); 
+			System.out.println("");
+			System.out.println("");
 			
 			//player action prompted
 			System.out.println("Choose an option: ");
@@ -258,20 +261,35 @@ class A2_ver6
 				shotgun = 0;
 				nextPlayer = true;
 				playerScores[turn] = playerScores[turn] + curbrains;
-				System.out.println(" -- You got " + curbrains + " brains this turn. --");
-				System.out.println("    -- Your total brains is " + playerScores[turn] + " --");
+				Boolean finalround = checkFinalRound(playerScores, turn);
+				System.out.println(finalround); // test
+				System.out.println("  ------------------------------------------------");
+				System.out.println("       You got " + curbrains + " brains this turn. ");
+				System.out.println("           TOTAL BRAINS: " + playerScores[turn]);
+				System.out.println("  ------------------------------------------------");
 				System.out.println("");
 				System.out.println("");
 				System.out.println("");
 				System.out.println("");
 				System.out.println("");
+
+				if (finalround == true){
+					System.out.println("     ___ _ __  _  __  _     ___  __  _  _ __  _ __ ");
+					System.out.println("    | __| |  \\| |/  \\| |   | _ \\/__\\| || |  \\| | _\\ ");
+					System.out.println("    | _|| | | ' | /\\ | |_  | v / \\/ | \\/ | | ' | v |");
+					System.out.println("    |_| |_|_|\\__|_||_|___| |_|_\\\\__/ \\__/|_|\\__|__/");
+					System.out.println("");
+					System.out.println("");
+					System.out.println("");
+					System.out.println("");
+				}
 
 
 			}
 			else if (userOption == 3)
 			{
 				System.out.println("Leaderboard: ");
-				PrintNames(playerNames);
+				printScores(playerNames, playerScores);
 			}
 			else if (userOption == 4)
 			{
@@ -315,14 +333,32 @@ class A2_ver6
 			System.out.println(myArray[i]);		
 		}
 	}
+
+		public static void printScores(String [] myArray, int [] scoreArray)
+	{
+		for(int i = 0; i < myArray.length; i++)
+		{
+			int playerNumber = i+1;
+			System.out.println(" ------------------------------");
+			System.out.print("   " + myArray[i] + ": ");		
+			System.out.println(scoreArray[i] + " brains.");
+			System.out.println(" ------------------------------");
+		}
+	}
 	
 	// Check current shotgun status
 	public static boolean CheckShotgun(int curShotguns) 
 	{
 		if(curShotguns > 2)
 		{
-			System.out.println("  YOU DIED AND LOST YOUR BRAINS. ");
+			System.out.println("    YOU DIED AND LOST YOUR BRAINS. ");
 			System.out.println("");
+			System.out.println("              +   ");
+			System.out.println("            .-\"-. ");
+			System.out.println("           / RIP \\ ");
+			System.out.println("           |     |  ");
+			System.out.println("          \\\\     |// ");
+			System.out.println("          ` \" \"\" \"   ");
 			System.out.println("");
 			System.out.println("");
 			System.out.println("");
@@ -331,7 +367,7 @@ class A2_ver6
 		}
 		else
 		{
-			System.out.println("Not Dead");
+			System.out.println("              Not Dead");
 			return false;
 		}
 	}
@@ -414,5 +450,13 @@ class A2_ver6
 			diceResult = "Something went wrong";
 		}
 		return diceResult;
+	}
+
+		public static boolean checkFinalRound (int [] playerScores, int turn) {
+		if (playerScores[turn] >= 13) {
+			return true;
+		}
+
+		return false;
 	}
 }
