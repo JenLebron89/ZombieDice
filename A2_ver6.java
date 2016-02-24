@@ -264,7 +264,7 @@ class A2_ver6
 				Boolean finalround = checkFinalRound(playerScores, turn);
 				System.out.println(finalround); // test
 				System.out.println("  ------------------------------------------------");
-				System.out.println("       You got " + curbrains + " brains this turn. ");
+				System.out.println("       +" + curbrains + " brains");
 				System.out.println("           TOTAL BRAINS: " + playerScores[turn]);
 				System.out.println("  ------------------------------------------------");
 				System.out.println("");
