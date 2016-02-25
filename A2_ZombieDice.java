@@ -102,16 +102,19 @@ class A2_ZombieDice
 		
 		int shotgun = 0; //shotguns per turn
 		int curbrains = 0; // brains counted per roll
-		int footprints = 0; // count footprints
 		
-		boolean rollStoredDice = false; //roll footprint dice
 		boolean nextPlayer = false; // change player
-
+		
+		// Count footprints
+		int rollRedFootprint = 0;
+		int rollGreenFootprint = 0;
+		int rollYellowFootprint = 0;
+		
 		// dice pool
 		int noGreenDice = 6;
 		int noYellowDice = 4;
 		int noRedDice = 3;
-		int diceRoll = 3;
+		
 		displayWelcomeMessage();
 		
 		System.out.print("How Many Players: ");
@@ -123,7 +126,7 @@ class A2_ZombieDice
 		lives = noOfPlayers;
 		playerNames = new String[noOfPlayers];
 
-		for(int i = 0; i < playerNames.length; i++)
+		for(int i = 0; i < playerNames.length; i++) 
 		{
 			int playerNumber = i+1;
 			System.out.print("Enter Player " + playerNumber + " Name: ");
@@ -133,33 +136,80 @@ class A2_ZombieDice
 		while(lives != 0)
 		{
 			DisplayStart(turn, playerNames);
+			// System.out.println("      -- Your current score is: " + playerScores[turn] + " --"); 
+			System.out.println("");
+			System.out.println("");
 			
 			//player action prompted
 			System.out.println("Choose an option: ");
-			System.out.println("1 - Roll Dice, 2 - Bank, 3 - See Leaderboard, 4 - Exit"); 
+			System.out.println("1 - Take Dice, 2 - Bank, 3 - See Leaderboard, 4 - Exit"); 
 			userOption = in.nextInt();
+			in.nextLine();// clean out scanner
 			System.out.println("");
+			
 
 			if(userOption == 1)
 			{
 				int randomDiceColor = 0;
+				int setDiceColor = 0;
 				String myDice = "";
+				String [] threeDiceToThrow;
+				threeDiceToThrow = new String[3];
 				
-				//loop for 3 dice
-				while(diceRoll > 0)
+				//Generate 3 Dice to throw
+				for(int i = 0; i < threeDiceToThrow.length; i++)
 				{
-					randomDiceColor = diceColorInt.nextInt(3);
-					myDice = ThrowDice(randomDiceColor);
-					System.out.println(myDice); 
-					
-					if(footprints != 0 && rollStoredDice)// should only roll on the first go 
+					if(rollGreenFootprint > 0)
 					{
-						System.out.println("Roll a runner: ");
-						footprints--;
-						//diceRoll--;
+						threeDiceToThrow[i] = GenerateDice(0);
+						System.out.println("Green ReRoll");//Green
+						rollGreenFootprint--;
 					}
-					else if(randomDiceColor == 0 && noGreenDice > 0)//Green
+					else if(rollRedFootprint > 0)
 					{
+						threeDiceToThrow[i] = GenerateDice(1);
+						System.out.println("Red ReRoll");//Red
+						rollRedFootprint--;
+					}
+					else if(rollYellowFootprint > 0)
+					{
+						threeDiceToThrow[i] = GenerateDice(2);
+						System.out.println("Yellow ReRoll");//Yellow
+						rollYellowFootprint--;
+					}
+					else
+					{	
+						// check dice is in play
+						randomDiceColor = diceColorInt.nextInt(3);
+						
+						// need to loop this
+						if(randomDiceColor == 0 && noGreenDice > 0)
+						{
+							setDiceColor = 0;
+						}
+						else if(randomDiceColor == 1 && noRedDice > 0)
+						{
+							setDiceColor = 1;
+						}
+						else if(randomDiceColor == 2 && noYellowDice > 0)
+						{
+							setDiceColor = 2;
+						}	
+						
+						threeDiceToThrow[i] = GenerateDice(randomDiceColor);
+						System.out.println(threeDiceToThrow[i] + " Dice");//random Color
+					}
+				}
+				System.out.println("");
+				
+				ThrowDice();		
+				
+				for(int i = 0; i < threeDiceToThrow.length; i++)
+				{
+					if(threeDiceToThrow[i] == "Green")//Green
+					{
+						myDice = ThrowDice(0);
+						
 						if(myDice == "Brain")
 						{
 							noGreenDice--;
@@ -168,17 +218,18 @@ class A2_ZombieDice
 						else if(myDice == "Footprint")
 						{
 							//store dice for another turn
-							footprints++;
+							rollGreenFootprint++;
 						}
 						else if(myDice == "Shotgun")
 						{
+							noGreenDice--;
 							shotgun++;
-						}
-						
-						diceRoll--;
+						}						
 					}
-					else if(randomDiceColor == 1 && noRedDice > 0)//Red
+					else if(threeDiceToThrow[i] == "Red")//Red
 					{
+						myDice = ThrowDice(1);
+						
 						if(myDice == "Brain")
 						{
 							noRedDice--;
@@ -187,16 +238,18 @@ class A2_ZombieDice
 						else if(myDice == "Footprint")
 						{
 							//store dice for another turn
-							footprints++;
+							rollRedFootprint++;
 						}
 						else if(myDice == "Shotgun")
 						{
+							noRedDice--;
 							shotgun++;
 						}
-						diceRoll--;
 					}
-					else if(randomDiceColor == 2 && noYellowDice > 0)// Yellow
+					else if(threeDiceToThrow[i] == "Yellow")// Yellow
 					{
+						myDice = ThrowDice(2);
+						
 						if(myDice == "Brain")
 						{
 							noYellowDice--;
@@ -205,41 +258,25 @@ class A2_ZombieDice
 						else if(myDice == "Footprint")
 						{
 							//store dice for another turn
-							footprints++;
+							rollYellowFootprint++;
 						}
 						else if(myDice == "Shotgun")
 						{
+							noYellowDice--;
 							shotgun++;
 						}
-						diceRoll--;
 					}
-					else
-					{
-						System.out.println("Re Roll");
-						if(noGreenDice == 0 && noYellowDice == 0 && noGreenDice == 0)
-						{
-							break;
-						}
-					}
-					System.out.println(diceRoll);
+					System.out.println(threeDiceToThrow[i]+" "+ myDice);
 				} 
 				
-				if(footprints > 0)// make this a function to check footprint int
-				{
-					rollStoredDice = true;
-					System.out.println("You have " + footprints + " Footprint Dice");
-				}
-				else
-				{
-					rollStoredDice = false;
-				}
-				
-				diceRoll = 3;
 				System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice);// testing
 				 
-				// These are the the variables to be used 
-				System.out.println("No of shots to the face: " + shotgun);
-				System.out.println("Delicious Brains: " + curbrains);
+				// These are the the variables to be used    -- Method?
+				System.out.println(" ");
+				System.out.println(" -----------------------------------------------");
+				System.out.print(" Shots to the face: " + shotgun);
+				System.out.println("    |   Delicious Brains: " + curbrains);
+				System.out.println(" -----------------------------------------------");
 
 				System.out.println(" ");
 				
@@ -254,11 +291,36 @@ class A2_ZombieDice
 				//Bank Brains
 				shotgun = 0;
 				nextPlayer = true;
+				playerScores[turn] = playerScores[turn] + curbrains;
+				Boolean finalround = checkFinalRound(playerScores, turn);
+				System.out.println(finalround); // test
+				System.out.println("  ------------------------------------------------");
+				System.out.println("       You got " + curbrains + " brains this turn. ");
+				System.out.println("           TOTAL BRAINS: " + playerScores[turn]);
+				System.out.println("  ------------------------------------------------");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+
+				if (finalround == true){
+					System.out.println("     ___ _ __  _  __  _     ___  __  _  _ __  _ __ ");
+					System.out.println("    | __| |  \\| |/  \\| |   | _ \\/__\\| || |  \\| | _\\ ");
+					System.out.println("    | _|| | | ' | /\\ | |_  | v / \\/ | \\/ | | ' | v |");
+					System.out.println("    |_| |_|_|\\__|_||_|___| |_|_\\\\__/ \\__/|_|\\__|__/");
+					System.out.println("");
+					System.out.println("");
+					System.out.println("");
+					System.out.println("");
+				}
+
+
 			}
 			else if (userOption == 3)
 			{
 				System.out.println("Leaderboard: ");
-				PrintNames(playerNames);
+				printScores(playerNames, playerScores);
 			}
 			else if (userOption == 4)
 			{
@@ -274,7 +336,6 @@ class A2_ZombieDice
 				noYellowDice = 4;
 				noRedDice = 3;
 				
-				
 				curbrains = 0; // reset unbanked brains
 				turn++; // next Player
 			}
@@ -286,10 +347,17 @@ class A2_ZombieDice
 		}
 	}
 	
+	public static void ThrowDice()
+	{
+		System.out.println("Press enter to throw dice...");
+		Scanner keyboard = new Scanner(System.in);
+		keyboard.nextLine();
+	}
+	
 	public static void DisplayStart(int x, String [] myArray ) 
 	{
 		System.out.println("");
-		System.out.println(" "+ myArray[x]+"'s" + " turn");
+		System.out.println("   ************** "+ myArray[x]+"'s" + " turn **************");
 		System.out.println("");
 	}
 	
@@ -302,18 +370,41 @@ class A2_ZombieDice
 			System.out.println(myArray[i]);		
 		}
 	}
+
+		public static void printScores(String [] myArray, int [] scoreArray)
+	{
+		for(int i = 0; i < myArray.length; i++)
+		{
+			int playerNumber = i+1;
+			System.out.println(" ------------------------------");
+			System.out.print("   " + myArray[i] + ": ");		
+			System.out.println(scoreArray[i] + " brains.");
+			System.out.println(" ------------------------------");
+		}
+	}
 	
 	// Check current shotgun status
 	public static boolean CheckShotgun(int curShotguns) 
 	{
 		if(curShotguns > 2)
 		{
-			System.out.println("dead");
+			System.out.println("    YOU DIED AND LOST YOUR BRAINS. ");
+			System.out.println("");
+			System.out.println("              +   ");
+			System.out.println("            .-\"-. ");
+			System.out.println("           / RIP \\ ");
+			System.out.println("           |     |  ");
+			System.out.println("          \\\\     |// ");
+			System.out.println("          ` \" \"\" \"   ");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
 			return true;
 		}
 		else
 		{
-			System.out.println("Not Dead");
+			System.out.println("              Not Dead");
 			return false;
 		}
 	}
@@ -363,6 +454,26 @@ class A2_ZombieDice
 		System.out.println("");
 	}
 	
+	public static String GenerateDice(int dc)
+	{
+		String colorOfDice = "";
+		
+		if(dc == 0)
+		{
+			colorOfDice = "Green";
+		}
+		else if(dc == 1)
+		{
+			colorOfDice = "Red";
+		}
+		else if(dc == 2)
+		{
+			colorOfDice = "Yellow";
+		}
+		
+		return colorOfDice ;
+	}
+	
 	public static String ThrowDice(int diceColor)
 	{
 		String [] redDice = {"Shotgun", "Shotgun", "Shotgun","Footprint","Footprint","Brain"};
@@ -377,18 +488,18 @@ class A2_ZombieDice
 					
 		if(diceColor == 0)//Green Dice
 		{
-			System.out.println("Green");
+			//System.out.println("Green");
 			diceResult = greenDice[roll];
 		}
 		else if(diceColor == 1)// Red Dice 
 		{
-			System.out.println("Red");
+			//System.out.println("Red");
 			diceResult = redDice[roll];
 		}
 		
 		else if(diceColor == 2)//Yellow Dice
 		{
-			System.out.println("Yellow");
+			//System.out.println("Yellow");
 			diceResult = yellowDice[roll];
 		}
 		else
@@ -396,5 +507,13 @@ class A2_ZombieDice
 			diceResult = "Something went wrong";
 		}
 		return diceResult;
+	}
+
+		public static boolean checkFinalRound (int [] playerScores, int turn) {
+		if (playerScores[turn] >= 13) {
+			return true;
+		}
+
+		return false;
 	}
 }
