@@ -152,54 +152,72 @@ class A2_ZombieDice
 			{
 				int randomDiceColor = 0;
 				int setDiceColor = 0;
+				int x = 0;
 				String myDice = "";
 				String [] threeDiceToThrow;
-				threeDiceToThrow = new String[3];
-				
+				threeDiceToThrow = new String[3];							
+						
 				//Generate 3 Dice to throw
-				for(int i = 0; i < threeDiceToThrow.length; i++)
+	
+				//for(int i = 0; i < threeDiceToThrow.length; i++)				
+				while(x < threeDiceToThrow.length)
 				{
 					if(rollGreenFootprint > 0)
 					{
-						threeDiceToThrow[i] = GenerateDice(0);
+						threeDiceToThrow[x] = GenerateDice(0);
 						System.out.println("Green ReRoll");//Green
 						rollGreenFootprint--;
+						x++;
 					}
 					else if(rollRedFootprint > 0)
 					{
-						threeDiceToThrow[i] = GenerateDice(1);
+						threeDiceToThrow[x] = GenerateDice(1);
 						System.out.println("Red ReRoll");//Red
 						rollRedFootprint--;
+						x++;
 					}
 					else if(rollYellowFootprint > 0)
 					{
-						threeDiceToThrow[i] = GenerateDice(2);
+						threeDiceToThrow[x] = GenerateDice(2);
 						System.out.println("Yellow ReRoll");//Yellow
 						rollYellowFootprint--;
+						x++;
 					}
 					else
-					{	
-						// check dice is in play
+					{
+						// check dice is in play		
 						randomDiceColor = diceColorInt.nextInt(3);
 						
-						// need to loop this
 						if(randomDiceColor == 0 && noGreenDice > 0)
 						{
 							setDiceColor = 0;
+							x++;
 						}
 						else if(randomDiceColor == 1 && noRedDice > 0)
 						{
 							setDiceColor = 1;
+							x++;
 						}
 						else if(randomDiceColor == 2 && noYellowDice > 0)
 						{
 							setDiceColor = 2;
-						}	
+							x++;
+						}
+						else if (noGreenDice == 0 && noRedDice == 0 && noYellowDice == 0 )
+						{
+							break;
+						}
 						
-						threeDiceToThrow[i] = GenerateDice(randomDiceColor);
-						System.out.println(threeDiceToThrow[i] + " Dice");//random Color
+						System.out.println("Pick a color "+ setDiceColor);
+						
+						if(x > 0)
+						{
+							threeDiceToThrow[x-1] = GenerateDice(setDiceColor);
+							System.out.println(threeDiceToThrow[x-1] + " Dice");//random Color
+						}
 					}
 				}
+		
 				System.out.println("");
 				
 				ThrowDice();		
