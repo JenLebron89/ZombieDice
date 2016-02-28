@@ -99,6 +99,7 @@ class A2_ZombieDice
 		int turn = 0;
 		int lives = 0;
 		int userOption = 0;
+		int counter = 2;
 		
 		int shotgun = 0; //shotguns per turn
 		int curbrains = 0; // brains counted per roll
@@ -309,9 +310,12 @@ class A2_ZombieDice
 				//Bank Brains
 				shotgun = 0;
 				nextPlayer = true;
+			
+
+				//System.out.println(finalround); // test
+
 				playerScores[turn] = playerScores[turn] + curbrains;
-				Boolean finalround = checkFinalRound(playerScores, turn);
-				System.out.println(finalround); // test
+				
 				System.out.println("  ------------------------------------------------");
 				System.out.println("       You got " + curbrains + " brains this turn. ");
 				System.out.println("           TOTAL BRAINS: " + playerScores[turn]);
@@ -322,16 +326,17 @@ class A2_ZombieDice
 				System.out.println("");
 				System.out.println("");
 
-				if (finalround == true){
-					System.out.println("     ___ _ __  _  __  _     ___  __  _  _ __  _ __ ");
-					System.out.println("    | __| |  \\| |/  \\| |   | _ \\/__\\| || |  \\| | _\\ ");
-					System.out.println("    | _|| | | ' | /\\ | |_  | v / \\/ | \\/ | | ' | v |");
-					System.out.println("    |_| |_|_|\\__|_||_|___| |_|_\\\\__/ \\__/|_|\\__|__/");
-					System.out.println("");
-					System.out.println("");
-					System.out.println("");
-					System.out.println("");
+
+				//boolean finalround = checkFinalRound(playerScores, turn, counter);
+				counter = checkFinalRound(playerScores, turn, counter);
+
+
+				if (counter == 0){
+					displayWinner(playerScores, noOfPlayers, playerNames);
+					lives = 0;
 				}
+
+
 
 
 			}
@@ -527,11 +532,74 @@ class A2_ZombieDice
 		return diceResult;
 	}
 
-		public static boolean checkFinalRound (int [] playerScores, int turn) {
-		if (playerScores[turn] >= 13) {
-			return true;
+public static int checkFinalRound (int [] playerScores, int turn, int counter) {
+
+	
+		if (playerScores[turn] >= 13 && counter == 2) {
+		
+			System.out.println("     ___ _ __  _  __  _     ___  __  _  _ __  _ __ ");
+			System.out.println("    | __| |  \\| |/  \\| |   | _ \\/__\\| || |  \\| | _\\ ");
+			System.out.println("    | _|| | | ' | /\\ | |_  | v / \\/ | \\/ | | ' | v |");
+			System.out.println("    |_| |_|_|\\__|_||_|___| |_|_\\\\__/ \\__/|_|\\__|__/");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+
+			counter = counter -1;
+
+			// System.out.println("TEST: COUNTER IS:");
+			// System.out.println(counter); //test
+
+			return counter;
+
 		}
 
-		return false;
+		else if (playerScores[turn] >= 13 && counter == 1 ){
+			// System.out.println("TEST: COUNTER IS:");  //test
+			// System.out.println(counter); 
+
+			System.out.println("     __  __  __ __ ___    __   _   _  ___ ___ ");
+			System.out.println("    / _]/  \\|  V  | __|  /__\\ | \\ / || __| _ \\");
+			System.out.println("   | [/\\ /\\ | \\_/ | _|  | \\/ |`\\ V /'| _|| v /");
+			System.out.println("    \\__/_||_|_| |_|___|  \\__/   \\_/  |___|_|_\\");
+
+			counter = counter -1;
+			return counter;
+
+		}
+			
+
+		return counter;
 	}
 }
+
+
+	public static void displayRollResults (int shotgun, int curbrains) {
+
+		System.out.println(" ");
+		System.out.println(" -----------------------------------------------");
+		System.out.print(" Shots to the face: " + shotgun);
+		System.out.println("    |   Delicious Brains: " + curbrains);
+		System.out.println(" -----------------------------------------------");
+		System.out.println(" ");
+
+	}
+	
+		public static void displayWinner (int[] scores, int players, String[] playerNames ){
+		int highscore = scores[0];
+		int i = 0;
+		int winner = 0;
+
+
+		while (i < (players - 1) ){
+			if (scores[i] > highscore) {
+				highscore = scores[i];
+				winner = i;
+			}
+			i++;
+		}
+		System.out.println("");System.out.println("");
+		System.out.println("           *********  " + playerNames[winner] + " WINS! Score: " + highscore + "   *********");
+		System.out.println("");System.out.println("");
+	}
