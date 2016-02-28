@@ -2,92 +2,9 @@ import java.util.*;
 
 // Joseph Cheevers 2905225 + Jennifer Lebron 2894184 = JJ and the Zombies
 
-/*
-Game Rules
-On each turn, randomly generate 3 dice for the game. Each one is a human victim.
-There are 3 different types of die in the game
-1 Red are the toughest.
-	(They have 3 Shotguns sides, 2 Footprints sides and 1 Brains side)
-2 Green are easiest.
-	(They have 1 Shotguns side, 2 Footprints sides and 3 Brains sides)
-3 Yellow are medium tough.
-	(They have 2 Shotguns sides, 2 Footprints sides and 2 Brains sides)
-	
-The dice have three symbols:
-1 Brain
-	You ate your victim’s brain.
-2 Shotgun
-	He fought back!
-3 Footprints
-	Your victim escaped.
-	
-Contents
-	13 Dice (pool of dice) 
-		6G 
-		4Y 
-		3R
-	1 Cup 
-Start
-	Introduction: Rules
-	No of players 
-	Names of players 
-Turn:
-	display player name
-	display player points
-User Input
-	See leaderboards
-	Roll
-		On generate dice: displays colours
-		
-	Display results
-	
-	Check & compare results
-		Check shotguns
-			store on each roll
-			3 or higher: end turn & lose unbanked brains
-			reset on each turn
-		
-		Check Brains
-			store on each roll
-			if 13 or higher: win game/final round
-			bank brains: ends turn
-		Check Runner
-			Keep dice of that color in play and generate remaining dice
-	
-	Roll Again / Bank/ Last Round(if < 13 brains) / Tie(sudden Death)
-	
-Give Up
-Game System
-Generating Dice 			- 5
-Rolling Dice 				- 5
-Adding scores 				- 5
-Tracking shotguns 			- 5
-User ending turn 			- 5
-Game ending turn 			- 5
-Continue playing 			- 5
-Turn based system 			- 10
-Ending game 				- 5
-User Interface: 			(10%)
-Game style layout 			- 5
-Display current player	 	- 2
-User feedback 				- 3
-Coding style: 				(20%)
-Indentation 				- 3
-Comments 					- 4
-Use of Methods 				- 3
-Use of arrays 				- 10
-Extra Features: 			(20%)
-Using footprints correctly 	- 3
-Taking players names 		- 4
-3+ players 					- 3
-Use of arrays 				- 10
-in.nextLine() clean out sanner
-*/
 
-class A2_ZombieDice
-{
-	public static void main (String[]args)
-	{
+class A2_ZombieDice {
+	public static void main (String[]args) {
 		Scanner in = new Scanner(System.in);
 		Random diceColorInt = new Random();
 		
@@ -99,7 +16,7 @@ class A2_ZombieDice
 		int turn = 0;
 		int lives = 0;
 		int userOption = 0;
-		int counter = 2;
+		// int counter = 2; // delete
 		
 		int shotgun = 0; //shotguns per turn
 		int curbrains = 0; // brains counted per roll
@@ -137,7 +54,7 @@ class A2_ZombieDice
 		while(lives != 0)
 		{
 			DisplayStart(turn, playerNames);
-			// System.out.println("      -- Your current score is: " + playerScores[turn] + " --"); 
+			// System.out.println("      -- Your current score is: " + playerScores[turn] + " --"); // delete
 			System.out.println("");
 			System.out.println("");
 			
@@ -159,28 +76,30 @@ class A2_ZombieDice
 				threeDiceToThrow = new String[3];							
 						
 				//Generate 3 Dice to throw
+
+				// printCup();
 	
-				//for(int i = 0; i < threeDiceToThrow.length; i++)				
+				//for(int i = 0; i < threeDiceToThrow.length; i++)		// delete		
 				while(x < threeDiceToThrow.length)
 				{
 					if(rollGreenFootprint > 0)
 					{
 						threeDiceToThrow[x] = GenerateDice(0);
-						System.out.println("Green ReRoll");//Green
+						System.out.print("          [ Green ReRoll ]    ");//Green
 						rollGreenFootprint--;
 						x++;
 					}
 					else if(rollRedFootprint > 0)
 					{
 						threeDiceToThrow[x] = GenerateDice(1);
-						System.out.println("Red ReRoll");//Red
+						System.out.print("          [ Red ReRoll ]    ");//Red
 						rollRedFootprint--;
 						x++;
 					}
 					else if(rollYellowFootprint > 0)
 					{
 						threeDiceToThrow[x] = GenerateDice(2);
-						System.out.println("Yellow ReRoll");//Yellow
+						System.out.print("          [ Yellow ReRoll ]    ");//Yellow
 						rollYellowFootprint--;
 						x++;
 					}
@@ -209,19 +128,23 @@ class A2_ZombieDice
 							break;
 						}
 						
-						System.out.println("Pick a color "+ setDiceColor);
+						// System.out.println("Pick a color "+ setDiceColor); // delete
 						
 						if(x > 0)
 						{
 							threeDiceToThrow[x-1] = GenerateDice(setDiceColor);
-							System.out.println(threeDiceToThrow[x-1] + " Dice");//random Color
+							System.out.print("          [ "+ threeDiceToThrow[x-1] + " ]    ");//random Color
 						}
 					}
 				}
 		
 				System.out.println("");
-				
-				ThrowDice();		
+				System.out.println("");
+				System.out.println("");
+
+				ThrowDice();	
+
+				printCup();	
 				
 				for(int i = 0; i < threeDiceToThrow.length; i++)
 				{
@@ -285,19 +208,13 @@ class A2_ZombieDice
 							shotgun++;
 						}
 					}
-					System.out.println(threeDiceToThrow[i]+" "+ myDice);
+					System.out.println("                                [ " + myDice + " ]");
 				} 
 				
-				System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice);// testing
+				// System.out.println("G"+noGreenDice+"Y"+noYellowDice+"R"+noRedDice); // testing 
 				 
-				// These are the the variables to be used    -- Method?
-				System.out.println(" ");
-				System.out.println(" -----------------------------------------------");
-				System.out.print(" Shots to the face: " + shotgun);
-				System.out.println("    |   Delicious Brains: " + curbrains);
-				System.out.println(" -----------------------------------------------");
 
-				System.out.println(" ");
+				displayRollResults(shotgun, curbrains); // displays results of roll
 				
 				if(CheckShotgun(shotgun)) // change player 
 				{
@@ -312,42 +229,38 @@ class A2_ZombieDice
 				nextPlayer = true;
 			
 
-				//System.out.println(finalround); // test
-
-				playerScores[turn] = playerScores[turn] + curbrains;
-				
-				System.out.println("  ------------------------------------------------");
-				System.out.println("       You got " + curbrains + " brains this turn. ");
-				System.out.println("           TOTAL BRAINS: " + playerScores[turn]);
-				System.out.println("  ------------------------------------------------");
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
 
 
-				//boolean finalround = checkFinalRound(playerScores, turn, counter);
-				counter = checkFinalRound(playerScores, turn, counter);
+				displayTurnResults(playerScores, curbrains, turn);  // displays results at end of turn
 
 
-				if (counter == 0){
-					displayWinner(playerScores, noOfPlayers, playerNames);
-					lives = 0;
+				boolean finalround = checkFinalRound(playerScores, turn); //checks if score is 13 or higher
+
+				if (finalround == true){ // score is <=13
+					displayWinner(playerScores, noOfPlayers, playerNames);  // prints out winner
+					lives = 0;  // ends game
 				}
 
 
 
 
 			}
-			else if (userOption == 3)
+			else if (userOption == 3) // displays leaderboard
 			{
 				System.out.println("Leaderboard: ");
 				printScores(playerNames, playerScores);
 			}
-			else if (userOption == 4)
+			else if (userOption == 4) // user quits
 			{
-				lives = 0;
+
+				System.out.println("Are you sure?");
+				System.out.println("1 - Cancel  |  0 - Quit");
+				int quit = in.nextInt();
+
+				if (quit == 0){
+
+					lives = 0;
+				}
 			}
 						
 			if(nextPlayer)
@@ -370,6 +283,9 @@ class A2_ZombieDice
 		}
 	}
 	
+
+	//         --------------------------------- METHODS ---------------------------------------------
+
 	public static void ThrowDice()
 	{
 		System.out.println("Press enter to throw dice...");
@@ -394,16 +310,14 @@ class A2_ZombieDice
 		}
 	}
 
-		public static void printScores(String [] myArray, int [] scoreArray)
-	{
-		for(int i = 0; i < myArray.length; i++)
-		{
+	public static void printScores(String [] myArray, int [] scoreArray){
+		for(int i = 0; i < myArray.length; i++) {
 			int playerNumber = i+1;
 			System.out.println(" ------------------------------");
 			System.out.print("   " + myArray[i] + ": ");		
 			System.out.println(scoreArray[i] + " brains.");
 			System.out.println(" ------------------------------");
-		}
+			}
 	}
 	
 	// Check current shotgun status
@@ -427,7 +341,7 @@ class A2_ZombieDice
 		}
 		else
 		{
-			System.out.println("              Not Dead");
+			System.out.println("                Not Dead");
 			return false;
 		}
 	}
@@ -467,9 +381,7 @@ class A2_ZombieDice
     	System.out.println("");
     	System.out.println("       If you decide to stop, score 1 for each Brain you have. It’s the next player’s turn.");
     	System.out.println("");
-    	System.out.println("       Play until someone reaches 13 Brains. Then finish the round. ");
-    	System.out.println("       Whoever has the most Brains at the end of that round is the winner.");
-    	System.out.println("       If there’s a tie, the leaders (only) play a tiebreaker round.");
+    	System.out.println("       The first one to score 13 brains WINS! ");
     	System.out.println("");
     	System.out.println("");
     	System.out.println("");
@@ -532,47 +444,26 @@ class A2_ZombieDice
 		return diceResult;
 	}
 
-public static int checkFinalRound (int [] playerScores, int turn, int counter) {
+	public static boolean checkFinalRound (int [] playerScores, int turn) {
 
-	
-		if (playerScores[turn] >= 13 && counter == 2) {
 		
-			System.out.println("     ___ _ __  _  __  _     ___  __  _  _ __  _ __ ");
-			System.out.println("    | __| |  \\| |/  \\| |   | _ \\/__\\| || |  \\| | _\\ ");
-			System.out.println("    | _|| | | ' | /\\ | |_  | v / \\/ | \\/ | | ' | v |");
-			System.out.println("    |_| |_|_|\\__|_||_|___| |_|_\\\\__/ \\__/|_|\\__|__/");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-
-			counter = counter -1;
-
-			// System.out.println("TEST: COUNTER IS:");
-			// System.out.println(counter); //test
-
-			return counter;
-
-		}
-
-		else if (playerScores[turn] >= 13 && counter == 1 ){
-			// System.out.println("TEST: COUNTER IS:");  //test
-			// System.out.println(counter); 
-
-			System.out.println("     __  __  __ __ ___    __   _   _  ___ ___ ");
-			System.out.println("    / _]/  \\|  V  | __|  /__\\ | \\ / || __| _ \\");
-			System.out.println("   | [/\\ /\\ | \\_/ | _|  | \\/ |`\\ V /'| _|| v /");
-			System.out.println("    \\__/_||_|_| |_|___|  \\__/   \\_/  |___|_|_\\");
-
-			counter = counter -1;
-			return counter;
-
-		}
+			if (playerScores[turn] >= 13) {
 			
+				System.out.println(" ");
+				System.out.println("     ");
+				System.out.println("     __  __  __ __ ___    __   _   _  ___ ___ ");
+				System.out.println("    / _]/  \\|  V  | __|  /__\\ | \\ / || __| _ \\");
+				System.out.println("   | [/\\ /\\ | \\_/ | _|  | \\/ |`\\ V /'| _|| v /");
+				System.out.println("    \\__/_||_|_| |_|___|  \\__/   \\_/  |___|_|_\\");
 
-		return counter;
-	}
-}
+				return true;
+
+			}
+				
+
+			return false;
+		}
+
 
 
 	public static void displayRollResults (int shotgun, int curbrains) {
@@ -586,20 +477,65 @@ public static int checkFinalRound (int [] playerScores, int turn, int counter) {
 
 	}
 	
-		public static void displayWinner (int[] scores, int players, String[] playerNames ){
+	public static void displayWinner (int[] scores, int players, String[] playerNames ){
 		int highscore = scores[0];
 		int i = 0;
 		int winner = 0;
 
 
-		while (i < (players - 1) ){
+		while (i <= (players-1) ){
 			if (scores[i] > highscore) {
 				highscore = scores[i];
 				winner = i;
 			}
 			i++;
 		}
-		System.out.println("");System.out.println("");
-		System.out.println("           *********  " + playerNames[winner] + " WINS! Score: " + highscore + "   *********");
-		System.out.println("");System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("                             _        ");           
+		System.out.println("                     __ __ _(_)_ _  _ _  ___ _ _"); 
+		System.out.println("                    \\ V  V / | ' \\| ' \\/ -_) '_|");
+		System.out.println("                     \\_/\\_/|_|_||_|_||_\\___|_|  ");         
+		System.out.println("");
+		System.out.println("                 --------------------------------------------");
+		System.out.println("                              " + playerNames[winner] + "      Score: " + highscore + "   ");
+		System.out.println("                 --------------------------------------------");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
 	}
+
+	public static void displayTurnResults (int[] playerScores, int curbrains, int turn){
+				playerScores[turn] = playerScores[turn] + curbrains;
+				
+				System.out.println("  ------------------------------------------------");
+				System.out.println("       You got " + curbrains + " brains this turn. ");
+				System.out.println("           TOTAL BRAINS: " + playerScores[turn]);
+				System.out.println("  ------------------------------------------------");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+	}
+
+	public static void printCup () {
+		System.out.println("");
+		System.out.println("");
+		System.out.println("        .  .. .    ...    .          ");   
+		System.out.println("      DMMOMMMDMMMMMMMMMMMMMM .        ");    
+		System.out.println("   .Z                    IM    M        ");  
+		System.out.println("   8                    M       M       ");  
+		System.out.println("  I                    M         M      ");  
+		System.out.println(" .N                  .M          M.     ");  
+		System.out.println("  M                   8         .D      ");  
+		System.out.println("  \\                  |          .D      ");  
+		System.out.println("    7  ..            7           ?      ");  
+		System.out.println("      NMM..          I          D.      ");  
+		System.out.println("            '''$M    .M       .M.        ");  
+		System.out.println("                 '''MM M ..  M          ");  
+		System.out.println("                        MMMM            ");   
+		System.out.println("");
+		System.out.println("");
+	}
+}
